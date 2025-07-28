@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button onclick="getAllData()">Get all Data</button>
+    <input type="number" id="inputId">
+    <button id="btn">Get Data</button>
+    <button id="postStore">Post Api for store</button>
+
+    <script>
+
+
+         function getData(id) {
+            const url = `http://127.0.0.1:8000/api/category/find/${id}`;
+            const config= {
+                method:"GET",
+            }
+            fetch(url,config)
+            .then(response=>response.json())
+            .then(data=>console.log(data))
+            .catch(err=>console.lo(err))
+        }
+        function getAllData(){
+            const url = 'http://127.0.0.1:8000/api/category/list';
+            const config ={
+                method:"GET",
+            }
+            
+            fetch(url,config)
+            .then(response=>response.json())
+            .then(data=>console.log(data))
+            .catch(err=>console.log(err))
+
+
+        }
+
+        document.getElementById('btn').addEventListener('click',function(){
+            //alert("hi");
+            let inputData = document.getElementById('inputId').value;
+            //alert(inputData);
+            getData(inputData);
+           
+        });
+
+        document.getElementById('postStore').addEventListener('click',function(){
+           const url ='http://127.0.0.1:8000/api/category/store'; 
+           const config ={
+                method:"POST",
+                headers:{
+                    'Content-Type':"application/json",
+                    'Accept':'application/json'
+
+                },
+                body:JSON.stringify({
+                    name:"Demo",
+                    status:1,
+                    description:"Demo derscription",
+                    image:"Demo"
+                })
+           }
+           
+           fetch(url,config)
+            .then(response=>response.json())
+            .then(result=>console.log(result))
+            .then(err=>console.log(err))
+
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+ let myMap = new Map();
+        myMap.set("name","Rubel");
+        myMap.set("age","25");
+        myMap.set("address","fff");
+        myMap.set("email","email");
+        console.log(myMap.keys());
+
+        class Room {
+             sayHi() {
+                console.log('hi');
+            }
+
+
+
+
+        }
+obj = new Room();
+obj.sayHi();
+
+const cartElements = document.querySelectorAll('.deleteCartItem');
+
+cartElements.forEach(function (element) {
+    element.addEventListener('click', function (event) {
+        // Step 1: Prevent the default action (if any, though not strictly needed for <i> tag)
+        // event.preventDefault(); // এটা ব্যবহার করতে পারেন যদি <i> ট্যাগের কোনো ডিফল্ট অ্যাকশন থাকে
+
+        // Step 2: Show the confirmation dialog
+        const confirmDelete = confirm('আপনি যদি এই কার্ট প্রোডাক্টটি সরিয়ে দেন, তবে এটি আর খুঁজে পাবেন না!!');
+
+        // Step 3: Check user's choice
+        if (confirmDelete) { // Only proceed if user clicked 'OK'
+            let cartId = element.getAttribute('data-cart-id');
+            // alert(cartId); // For debugging, uncomment if needed
+
+            fetch('/cart/delete', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    cart_id: cartId,
+                }),
+            })
+            .then(result => result.json())
+            .then(data => {
+                console.log(data.message);
+                // Optionally: Reload the page or remove the item from the UI
+                // window.location.reload();
+                // element.closest('.cart-item-row').remove(); // Example: adjust selector based on your HTML structure
+            })
+            .catch(error => {
+                console.log("Error deleting cart", error);
+            });
+        } else {
+            // User clicked 'Cancel', do nothing
+            console.log('ডিলিট বাতিল করা হয়েছে।');
+        }
+    });
+});
